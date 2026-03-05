@@ -1,9 +1,13 @@
 # Figure 1 — TTFT & TPOT: Qwen2.5-0.5B vs Mamba2-780m
 
-> **Tip:** The interactive notebook [`ispass_ae/notebooks/plotting_intro_ttft_tpot.ipynb`](ispass_ae/notebooks/plotting_intro_ttft_tpot.ipynb) can regenerate the figure directly from hard-coded paper values without running any inference.
+> **Tip:** The interactive notebook at [`plotting_intro_ttft_tpot.ipynb`](../../../notebooks/plotting_intro_ttft_tpot.ipynb) can regenerate the figure directly from hard-coded paper values without running any inference.
 
-> **Quick start:** Run the single top-level script from the repo root to collect all data and generate the figure in one step:
+> **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
 > ```bash
+> # from repo root
+> bash ispass_ae/scripts/paper_figures/Fig_1/gen_fig1.sh
+>
+> # or from this directory
 > bash gen_fig1.sh
 > ```
 > The script activates the correct venvs automatically and writes the output PNGs to this directory.
@@ -31,6 +35,7 @@ across two inference scenarios:
 
 | File | Purpose |
 |------|---------|
+| `gen_fig1.sh` | End-to-end bash script — collects data and plots the figure in one command |
 | `collect_fig1_data.py` | Runs inference profiling for one model / one context length and writes TTFT + TPOT to CSV |
 | `plot_fig1.py` | Reads the CSVs and generates the publication-quality PNG (`intro_ttft_tpot.png`) |
 

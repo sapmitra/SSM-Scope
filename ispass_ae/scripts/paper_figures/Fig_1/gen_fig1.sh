@@ -1,15 +1,12 @@
-/**
- * @ Copyright: (c) 2026 University of California, Irvine. Saptarshi Mitra. All rights reserved.
- * @ Author: Saptarshi Mitra (saptarshi14mitra@gmail.com)
- * @ License: MIT License
- * @ Create Time: 2026-03-05 02:55:15
- * @ Description:
- */
+
 
 #!/usr/bin/env bash
 # gen_fig1.sh — End-to-end script to collect data and reproduce Figure 1.
 #
 # Usage (from repo root):
+#   bash ispass_ae/scripts/paper_figures/Fig_1/gen_fig1.sh
+#
+# Or from this directory:
 #   bash gen_fig1.sh
 #
 # The script:
@@ -17,17 +14,19 @@
 #   2. Activates the Mamba venv and profiles Mamba2-780m (short + long context).
 #   3. Activates the Transformer venv and generates the final PNG files.
 #
-# Output PNGs are written to:
+# Output PNGs are written to the same directory as this script:
 #   ispass_ae/scripts/paper_figures/Fig_1/intro_ttft_tpot.png
 #   ispass_ae/scripts/paper_figures/Fig_1/intro_ttft_tpot_annotated.png
 
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-COLLECT_SCRIPT="${REPO_ROOT}/ispass_ae/scripts/paper_figures/Fig_1/collect_fig1_data.py"
-PLOT_SCRIPT="${REPO_ROOT}/ispass_ae/scripts/paper_figures/Fig_1/plot_fig1.py"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/../../../../" && pwd)"
+
+COLLECT_SCRIPT="${SCRIPT_DIR}/collect_fig1_data.py"
+PLOT_SCRIPT="${SCRIPT_DIR}/plot_fig1.py"
 TPOT_CSV="${REPO_ROOT}/src/tpot_logs/tpot_times.csv"
-OUT_DIR="${REPO_ROOT}/ispass_ae/scripts/paper_figures/Fig_1"
+OUT_DIR="${SCRIPT_DIR}"
 
 TRANSFORMER_VENV="${HOME}/.venvs/torch_transformers_ispass"
 MAMBA_VENV="${HOME}/.venvs/torch_ssm_ispass"
