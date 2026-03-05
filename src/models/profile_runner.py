@@ -385,11 +385,11 @@ def mamba2(seq_len: int = 64, batch_size: int = 1, device: str = 'cuda', weights
     model.eval_(seq_len, batch_size, NUM_RUNS, EXPORT, custom_ops)
     del model
 
-def mamba2_generate(seq_len: int = 8, max_num_tokens: int = 1, device: str = 'cuda', weights: str = None):
+def mamba2_generate(seq_len: int = 8, max_num_tokens: int = 256, device: str = 'cuda', weights: str = None):
     path_weights = weights or "state-spaces/mamba2-780m"
     # path_weights = "state-spaces/mamba2-1.3b"
     model = MambaProfile('mamba2', path_weights, device)
-    model.eval_gen_(seq_len, max_num_tokens , NUM_RUNS, EXPORT, custom_ops)
+    model.eval_gen_(seq_len, max_num_tokens, NUM_RUNS, EXPORT, custom_ops)
     del model
 
 def mamba_hf(seq_len: int = 64, batch_size: int = 1, device: str = 'cuda', weights: str = None):
@@ -423,11 +423,11 @@ def qwen25_instruct(seq_len: int = 8, batch_size: int = 1, device: str = 'cuda',
     # model.eval_shape(seq_len, batch_size, NUM_RUNS, EXPORT, custom_ops)
     del model
 
-def qwen25_instruct_generate(seq_len: int = 8, max_num_tokens: int = 1, device: str = 'cuda', weights: str = None):
+def qwen25_instruct_generate(seq_len: int = 8, max_num_tokens: int = 256, device: str = 'cuda', weights: str = None):
     path_weights = weights or "Qwen/Qwen2.5-0.5B-Instruct"
     # path_weights = weights or "Qwen/Qwen2.5-1.5B-Instruct"
     model = LMProfile('qwen25-instruct', path_weights, device)
-    model.eval_gen_(seq_len, max_num_tokens , NUM_RUNS, EXPORT, custom_ops)
+    model.eval_gen_(seq_len, max_num_tokens, NUM_RUNS, EXPORT, custom_ops)
     del model
 
 
