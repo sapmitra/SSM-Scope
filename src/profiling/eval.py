@@ -786,7 +786,9 @@ def profile_model_mamba_generate(model_name,
                         dynamo=False, 
                         out_dir="./non-gemm-out/", 
                         export=True,
-                        tokenizer=None): 
+                        tokenizer=None,
+                        csv_dir="tpot_logs",
+                        csv_filename="tpot_times.csv"): 
 
     skip_first, wait, warmup, active = 1, 2, 2, num_prof_runs
     # fn = lambda: model.generate(
@@ -818,12 +820,11 @@ def profile_model_mamba_generate(model_name,
         model = model.apply(lambda module: replace_forward(module, custom_ops_list))
         custom = False
     
-    # Create tpot_logs directory if it doesn't exist
-    tpot_logs_dir = "tpot_logs"
-    os.makedirs(tpot_logs_dir, exist_ok=True)
+    # Create csv_dir directory if it doesn't exist
+    os.makedirs(csv_dir, exist_ok=True)
     
-    # CSV file path for TPOT logs
-    tpot_csv_path = os.path.join(tpot_logs_dir, "tpot_times.csv")
+    # CSV file path for timing logs
+    tpot_csv_path = os.path.join(csv_dir, csv_filename)
     
     # Check if CSV exists to determine if we need to write headers
     file_exists = os.path.isfile(tpot_csv_path)
@@ -1216,7 +1217,9 @@ def profile_model_generate (model_name,
                     max_num_tokens = 128,
                     dynamo = False, 
                     out_dir = "./non-gemm-out/", 
-                    export = True): 
+                    export = True,
+                    csv_dir = "tpot_logs",
+                    csv_filename = "tpot_times.csv"): 
 
     skip_first, wait, warmup, active = 1, 2, 2, num_prof_runs
     schedule = torch.profiler.schedule(skip_first =skip_first, wait = wait, warmup = warmup, active = active)
@@ -1230,12 +1233,11 @@ def profile_model_generate (model_name,
         model = model.apply(lambda module: replace_forward(module, custom_ops_list))
         custom = False
     
-    # Create tpot_logs directory if it doesn't exist
-    tpot_logs_dir = "tpot_logs"
-    os.makedirs(tpot_logs_dir, exist_ok=True)
+    # Create csv_dir directory if it doesn't exist
+    os.makedirs(csv_dir, exist_ok=True)
     
-    # CSV file path for TPOT logs
-    tpot_csv_path = os.path.join(tpot_logs_dir, "tpot_times.csv")
+    # CSV file path for timing logs
+    tpot_csv_path = os.path.join(csv_dir, csv_filename)
     
     # Check if CSV exists to determine if we need to write headers
     file_exists = os.path.isfile(tpot_csv_path)

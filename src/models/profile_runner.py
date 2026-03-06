@@ -250,12 +250,14 @@ class LMProfile:
 
         profile_model_shape(self.model_name, self.model, inputs, custom_ops, num_runs, self.device, False, out_dir_shapes, export)
     
-    def eval_gen_(self, seq_len: int = 16, max_num_tokens: int = 16, num_runs : int = NUM_RUNS, export: bool = EXPORT, custom_ops = custom_ops, inputs = None): 
+    def eval_gen_(self, seq_len: int = 16, max_num_tokens: int = 16, num_runs : int = NUM_RUNS, export: bool = EXPORT, custom_ops = custom_ops, inputs = None,
+                  csv_dir: str = "tpot_logs", csv_filename: str = "tpot_times.csv"): 
         self.model_name = f'gen_{self.model_name}_{self.device}_{max_num_tokens}_{seq_len}'
         prompt = gen_random_prompt(seq_len)
         inputs = self.tokenizer(prompt, return_tensors='pt').to(self.device)
 
-        profile_model_generate(self.model_name, self.model, inputs, custom_ops, num_runs, self.device, max_num_tokens, False, out_dir, export)
+        profile_model_generate(self.model_name, self.model, inputs, custom_ops, num_runs, self.device, max_num_tokens, False, out_dir, export,
+                               csv_dir=csv_dir, csv_filename=csv_filename)
     
     def eval_gen_shape (self, seq_len: int = 16, max_num_tokens: int = 16, num_runs : int = NUM_RUNS, export: bool = EXPORT, custom_ops = custom_ops, inputs = None): 
         self.model_name = f'gen_{self.model_name}_{self.device}_{max_num_tokens}_{seq_len}'
@@ -336,12 +338,14 @@ class MambaProfile:
         inputs = self.tokenizer(prompt, return_tensors='pt').to(self.device)
         return memory_usage_prefill(self.model_name, self.model, inputs, self.device, use_kv_cache=use_kv_cache)
     
-    def eval_gen_(self, seq_len: int = 16, max_num_tokens: int = 16, num_runs : int = NUM_RUNS, export: bool = EXPORT, custom_ops = custom_ops, inputs = None): 
+    def eval_gen_(self, seq_len: int = 16, max_num_tokens: int = 16, num_runs : int = NUM_RUNS, export: bool = EXPORT, custom_ops = custom_ops, inputs = None,
+                  csv_dir: str = "tpot_logs", csv_filename: str = "tpot_times.csv"): 
         self.model_name = f'gen_{self.model_name}_{self.device}_{max_num_tokens}_{seq_len}'
         prompt = gen_random_prompt(seq_len)
         inputs = self.tokenizer(prompt, return_tensors='pt').to(self.device)
 
-        profile_model_mamba_generate(self.model_name, self.model, inputs, custom_ops, num_runs, self.device, max_num_tokens, False, out_dir, export)
+        profile_model_mamba_generate(self.model_name, self.model, inputs, custom_ops, num_runs, self.device, max_num_tokens, False, out_dir, export,
+                                     csv_dir=csv_dir, csv_filename=csv_filename)
 
     def eval_energy(self, seq_len: int = 1024, batch_size: int = 1, num_runs: int = NUM_RUNS, export: bool = EXPORT, custom_ops=custom_ops, inputs=None):
         """Measure prefill-phase energy (J) via nvidia-smi and save to energy_logs/energy_data.csv."""
@@ -491,6 +495,33 @@ def falcon_h1_generate(seq_len: int = 8, max_num_tokens: int = 1, device: str = 
     model.eval_gen_(seq_len, max_num_tokens, NUM_RUNS, EXPORT, custom_ops)
     del model
 
+
+def qwen25_instruct_generate_throughput(seq_len: int = 1024, max_num_tokens: int = 256, device: str = 'cuda', weights: str = None):
+    """Profile Qwen2.5-0.5B-Instruct generation and write to throughput_logs/generation_times.csv."""
+    path_weights = weights or "Qwen/Qwen2.5-0.5B-Instruct"
+    model = LMProfile('qwen25-instruct', path_weights, device)
+    model.eval_gen_(seq_len, max_num_tokens, NUM_RUNS, EXPORT, custom_ops,
+                    csv_dir="throughput_logs", csv_filename="generation_times.csv")
+    del model
+
+
+def mamba2_generate_throughput(seq_len: int = 1024, max_num_tokens: int = 256, device: str = 'cuda', weights: str = None):
+    """Profile Mamba2-780m generation and write to throughput_logs/generation_times.csv."""
+    path_weights = weights or "state-spaces/mamba2-780m"
+    model = MambaProfile('mamba2', path_weights, device)
+    model.eval_gen_(seq_len, max_num_tokens, NUM_RUNS, EXPORT, custom_ops,
+                    csv_dir="throughput_logs", csv_filename="generation_times.csv")
+    del model
+
+
+def falcon_h1_generate_throughput(seq_len: int = 1024, max_num_tokens: int = 256, device: str = 'cuda', weights: str = None):
+    """Profile Falcon-H1-0.5B-Base generation and write to throughput_logs/generation_times.csv."""
+    path_weights = weights or "tiiuae/Falcon-H1-0.5B-Base"
+    model = LMProfile('falcon-h1', path_weights, device)
+    model.eval_gen_(seq_len, max_num_tokens, NUM_RUNS, EXPORT, custom_ops,
+                    csv_dir="throughput_logs", csv_filename="generation_times.csv")
+    del model
+
 def qwen25_instruct_energy(seq_len: int = 1024, device: str = 'cuda', weights: str = None):
     """Profile prefill-phase energy for Qwen2.5-0.5B-Instruct."""
     path = weights or 'Qwen/Qwen2.5-0.5B-Instruct'
@@ -543,6 +574,10 @@ profiling_functions = {
     'qwen25-instruct-energy': qwen25_instruct_energy,
     'mamba2-energy': mamba2_energy,
     'falcon-h1-energy': falcon_h1_energy,
+    # Throughput-logging variants (write to throughput_logs/generation_times.csv)
+    'qwen25-instruct-throughput': qwen25_instruct_generate_throughput,
+    'mamba2-throughput': mamba2_generate_throughput,
+    'falcon-h1-throughput': falcon_h1_generate_throughput,
 }
 
 def parse_arguments(): 
