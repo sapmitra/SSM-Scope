@@ -37,7 +37,7 @@ def save_to_csv(data, filename="memory_footprints.csv"):
     
     print(f"Data saved to {filepath}")
 
-def model_prefill(model_name: str, model_config: str, seq_len: int = 8, batch_size: int = 1, device: str = 'cuda'):
+def model_prefill(model_name: str, model_config: str, seq_len: int = 8, batch_size: int = 1, device: str = 'cuda', csv_filename: str = "memory_footprints.csv"):
     # Record baseline memory before loading any model
     torch.cuda.empty_cache()
     gc.collect()
@@ -87,7 +87,7 @@ def model_prefill(model_name: str, model_config: str, seq_len: int = 8, batch_si
             'reserved_memory_mb': round(memory_details['peak_memory_reserved_mb'], 2),
             'total_memory_mb': round(total_memory, 2)
         }
-        save_to_csv(data)
+        save_to_csv(data, filename=csv_filename)
     else:
         # Original flow for transformer models with KV cache
         # Memory footprint without KV cache
@@ -134,7 +134,7 @@ def model_prefill(model_name: str, model_config: str, seq_len: int = 8, batch_si
             'reserved_memory_mb': round(memory_details_withkv['peak_memory_reserved_mb'], 2),
             'total_memory_mb': round(total_memory, 2)
         }
-        save_to_csv(data)
+        save_to_csv(data, filename=csv_filename)
     
 
 def save_decode_to_csv(data, filename="memory_decode_footprints.csv"):

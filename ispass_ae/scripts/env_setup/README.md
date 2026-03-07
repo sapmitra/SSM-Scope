@@ -86,6 +86,94 @@ source ~/.venvs/torch_falcon_ispass/bin/activate
 
 ---
 
+## Jetson Nano Orin — JetPack 6.2 (aarch64)
+
+**Device notes:**
+- NVMe storage mounted at `/data`; virtual environments are placed under `/data/.venvs/` to avoid filling the eMMC.
+- 16 GB swap configured from the NVMe (see [Mounting Swap — Jetson AI Lab](https://www.jetson-ai-lab.com/tutorials/ram-optimization/#mounting-swap)).
+- MAXN power mode enabled.
+
+Pre-built wheels for Jetson are sourced from **[https://pypi.jetson-ai-lab.io/jp6/cu126](https://pypi.jetson-ai-lab.io/jp6/cu126)** (JetPack 6.2, CUDA 12.6). Older patch versions of a package are available at the same index.
+
+All environments use **Python 3.10** (ships with JetPack 6.2).
+
+---
+
+### Jetson — Environment 1 — Transformers
+
+**Used for:** Qwen2.5 and other Transformer-only models like TinyLlama, Llama-3.2 checkpoints.
+
+```bash
+python3 -m venv /data/.venvs/torch_transformers_ispass --system-site-packages
+source /data/.venvs/torch_transformers_ispass/bin/activate
+pip install --upgrade pip
+# PyTorch 2.8.0 pre-built for JetPack 6.2 / CUDA 12.6 / aarch64
+pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/62a/1beee9f2f1470/torch-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=62a1beee9f2f147076a974d2942c90060c12771c94740830327cae705b2595fc"
+pip install transformers==4.52.3 accelerate pandas datasets matplotlib numpy
+```
+
+#### Activate
+
+```bash
+source /data/.venvs/torch_transformers_ispass/bin/activate
+```
+
+---
+
+### Jetson — Environment 2 — Mamba Models (`mamba_ssm`)
+
+**Used for:** `state-spaces/mamba-*` and `state-spaces/mamba2-*` checkpoints.
+
+Pre-built wheels are pinned to **JetPack 6.2 · CUDA 12.6 · PyTorch 2.8 · Python 3.10 · aarch64**.
+
+```bash
+python3 -m venv /data/.venvs/torch_ssm_ispass --system-site-packages
+source /data/.venvs/torch_ssm_ispass/bin/activate
+pip install --upgrade pip
+# PyTorch 2.8.0 pre-built for JetPack 6.2 / CUDA 12.6 / aarch64
+pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/62a/1beee9f2f1470/torch-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=62a1beee9f2f147076a974d2942c90060c12771c94740830327cae705b2595fc"
+pip install transformers==4.52.3 accelerate pandas datasets matplotlib numpy
+# mamba_ssm 2.2.5 and causal_conv1d 1.5.2 — pre-built for JetPack 6.2 / aarch64
+# Browse available wheels at https://pypi.jetson-ai-lab.io/jp6/cu126
+pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/b8e/35eeb4d7f0ada/mamba_ssm-2.2.5-cp310-cp310-linux_aarch64.whl#sha256=b8e35eeb4d7f0ada87235c15db0408cded09863bf6798ac451d0f65a6035b4ba"
+pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/28a/11e19b7f9fd56/causal_conv1d-1.5.2-cp310-cp310-linux_aarch64.whl#sha256=28a11e19b7f9fd56f17347da18fa31e09ad2ac5e61b8ed5653f069cbe7e5177b"
+# triton 3.4.0 — pre-built for JetPack 6.2 / aarch64
+pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/9da/4bcb8e8f0eba0/triton-3.4.0-cp310-cp310-linux_aarch64.whl#sha256=9da4bcb8e8f0eba00a097ad8c57b26102add499e520d67fb2d5362bebf976ca3"
+```
+
+#### Activate
+
+```bash
+source /data/.venvs/torch_ssm_ispass/bin/activate
+```
+
+---
+
+### Jetson — Environment 3 — Falcon-H1 Models (`torch_falcon_ispass`)
+
+**Used for:** `tiiuae/Falcon-H1-*` (Hybrid SSM-Transformer) and `Zyphra/Zamba2-*` (Hybrid SSM).
+
+```bash
+python3 -m venv /data/.venvs/torch_falcon_ispass --system-site-packages
+source /data/.venvs/torch_falcon_ispass/bin/activate
+pip install --upgrade pip
+# PyTorch 2.8.0 pre-built for JetPack 6.2 / CUDA 12.6 / aarch64
+pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/62a/1beee9f2f1470/torch-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=62a1beee9f2f147076a974d2942c90060c12771c94740830327cae705b2595fc"
+pip install accelerate pandas datasets matplotlib numpy transformers==4.57.3
+# causal_conv1d 1.5.2 — pre-built for JetPack 6.2 / aarch64
+pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/28a/11e19b7f9fd56/causal_conv1d-1.5.2-cp310-cp310-linux_aarch64.whl#sha256=28a11e19b7f9fd56f17347da18fa31e09ad2ac5e61b8ed5653f069cbe7e5177b"
+# triton 3.4.0 — pre-built for JetPack 6.2 / aarch64
+pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/9da/4bcb8e8f0eba0/triton-3.4.0-cp310-cp310-linux_aarch64.whl#sha256=9da4bcb8e8f0eba00a097ad8c57b26102add499e520d67fb2d5362bebf976ca3"
+```
+
+#### Activate
+
+```bash
+source /data/.venvs/torch_falcon_ispass/bin/activate
+```
+
+---
+
 ## Quick Verification
 
 After activating the relevant environment, confirm the setup from inside `src/`:
