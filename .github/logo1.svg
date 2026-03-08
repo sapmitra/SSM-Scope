@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 250" width="100%" height="100%">
+  <defs>
+    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F0FF" />
+      <stop offset="50%" stop-color="#00FFAA" />
+      <stop offset="100%" stop-color="#00F0FF" />
+    </linearGradient>
+    
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur1" />
+      <feGaussianBlur stdDeviation="2" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <radialGradient id="gridGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00FFAA" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#0A0F1C" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="250" fill="#0A0F1C" rx="16" />
+
+  <g transform="translate(20, 0)">
+    <circle cx="130" cy="125" r="90" fill="url(#gridGlow)" />
+    
+    <g stroke="#1A2744" stroke-width="1.5">
+      <line x1="40" y1="80" x2="220" y2="80" stroke-dasharray="4 4" />
+      <line x1="40" y1="125" x2="220" y2="125" />
+      <line x1="40" y1="170" x2="220" y2="170" stroke-dasharray="4 4" />
+      
+      <line x1="85" y1="40" x2="85" y2="210" stroke-dasharray="4 4" />
+      <line x1="130" y1="40" x2="130" y2="210" />
+      <line x1="175" y1="40" x2="175" y2="210" stroke-dasharray="4 4" />
+    </g>
+
+    <text x="45" y="55" font-family="monospace" font-size="10" fill="#00FFAA" opacity="0.4">h'(t) = Ah(t) + Bx(t)</text>
+    <text x="45" y="70" font-family="monospace" font-size="10" fill="#00FFAA" opacity="0.4">y(t) = Ch(t) + Dx(t)</text>
+
+    <rect x="40" y="35" width="180" height="180" rx="8" fill="none" stroke="#1A2744" stroke-width="2" />
+
+    <path d="M 155 70
+             C 145 25, 95 25, 95 75
+             C 95 115, 165 135, 165 175
+             C 165 225, 100 225, 95 180"
+          fill="none" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round" />
+
+    <path d="M 40 125
+             Q 62.5 -25, 85 125
+             T 130 125
+             T 175 125
+             T 220 125"
+          fill="none" stroke="url(#waveGrad)" stroke-width="5" stroke-linecap="round" filter="url(#glow)" />
+
+    <g fill="#FFFFFF">
+      <circle cx="40" cy="125" r="3" />
+      <circle cx="85" cy="125" r="3" />
+      <circle cx="175" cy="125" r="3" />
+      <circle cx="220" cy="125" r="3" />
+      <circle cx="130" cy="125" r="4.5" fill="#00FFAA" filter="url(#glow)" />
+      <circle cx="62.5" cy="50" r="3.5" fill="#00F0FF" />
+      <circle cx="152.5" cy="50" r="3.5" fill="#00F0FF" />
+      <circle cx="107.5" cy="200" r="3.5" fill="#00F0FF" />
+      <circle cx="197.5" cy="200" r="3.5" fill="#00F0FF" />
+    </g>
+  </g>
+
+  <g transform="translate(255, 0)">
+    <text x="0" y="118" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="72" font-weight="900" fill="#FFFFFF" letter-spacing="1">SSM</text>
+    <text x="5" y="162" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="600" fill="url(#waveGrad)" letter-spacing="8">CHARACTERIZATION</text>
+    
+    <rect x="5" y="185" width="280" height="24" rx="4" fill="#1A2744" />
+    <text x="15" y="202" font-family="monospace" font-size="12" font-weight="bold" fill="#94A3B8" letter-spacing="1">LONG-CONTEXT INFERENCE PROFILING</text>
+  </g>
+</svg>

@@ -1,6 +1,9 @@
+<p align="center">
+  <img src=".github/logo1.svg" alt="SSM-Characterization Logo" width="600">
+</p>
 <div align="center">
-
-# 🔬 SSM-Scope
+<!-- 
+# 🔬 SSM-Scope -->
 
 ### *A Characterization Framework for State Space Models & Hybrid LLMs in Long Context*
 
