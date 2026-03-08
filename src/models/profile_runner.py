@@ -304,6 +304,20 @@ class LMProfile:
         inputs = self.tokenizer(prompt, return_tensors='pt').to(self.device)
         profile_model_energy(self.model_name, self.model, inputs, custom_ops, num_runs, self.device, False, out_dir, export)
 
+    def eval_profile(self, seq_len: int = 16, batch_size: int = 1, num_runs: int = NUM_RUNS,
+                     export: bool = EXPORT, custom_ops=custom_ops, inputs=None,
+                     profile_out_dir: str = None):
+        """Run operator-breakdown profiling and export per-op CSV + chrome trace.
+        """
+        self.model_name = f'{self.model_name}_{self.device}_{batch_size}_{seq_len}'
+        prompt = gen_random_prompt(seq_len)
+        inputs = self.tokenizer(prompt, return_tensors='pt').to(self.device)
+        profile_model(
+            self.model_name, self.model, inputs, custom_ops, num_runs, self.device,
+            False, profile_out_dir or out_dir, export,
+            export_profile=True,
+        )
+
 
 class MambaProfile:
     def __init__(self, model_name: str = 'mamba', model_config: str = 'mamba', device: str = 'cuda'):
@@ -460,10 +474,26 @@ def zamba2(seq_len: int = 8192, batch_size: int = 1, device: str = 'cuda', weigh
     model.eval_(seq_len, batch_size, NUM_RUNS, EXPORT, custom_ops)
     del model
 
+
+def zamba2_ops_profile(seq_len: int = 1024, batch_size: int = 1, device: str = 'cuda',
+                       weights: str = None, profile_out_dir: str = None):
+    model = LMProfile('zamba2', weights or 'Zyphra/Zamba2-1.2B-Instruct-v2', device)
+    model.eval_profile(seq_len, batch_size, NUM_RUNS, EXPORT, custom_ops,
+                       profile_out_dir=profile_out_dir)
+    del model
+
 def hymba(seq_len: int = 64, batch_size: int = 1, device: str = 'cuda', weights: str = None):
     # model = LMProfile('hymba', weights or 'nvidia/Hymba-1.5B-Base', device)
     model = LMProfile('hymba', weights or 'nvidia/Hymba-1.5B-Instruct', device)
     model.eval_(seq_len, batch_size, NUM_RUNS, EXPORT, custom_ops)
+    del model
+
+
+def hymba_ops_profile(seq_len: int = 1024, batch_size: int = 1, device: str = 'cuda',
+                      weights: str = None, profile_out_dir: str = None):
+    model = LMProfile('hymba', weights or 'nvidia/Hymba-1.5B-Instruct', device)
+    model.eval_profile(seq_len, batch_size, NUM_RUNS, EXPORT, custom_ops,
+                       profile_out_dir=profile_out_dir)
     del model
 
 def qwen25_instruct(seq_len: int = 8, batch_size: int = 1, device: str = 'cuda', weights: str = None):
@@ -614,6 +644,8 @@ profiling_functions = {
     # Operator-breakdown profiling for Fig 7
     'mamba-ops-profile': mamba_ops_profile,
     'mamba2-ops-profile': mamba2_ops_profile,
+    'hymba-ops-profile': hymba_ops_profile,
+    'zamba2-ops-profile': zamba2_ops_profile,
 }
 
 def parse_arguments(): 

@@ -575,7 +575,8 @@ def profile_model (model_name,
                     device, 
                     dynamo = False, 
                     out_dir = "./non-gemm-out/", 
-                    export = True): 
+                    export = True,
+                    export_profile: bool = False): 
 
     skip_first, wait, warmup, active = 1, 2, 2, num_prof_runs
     schedule = torch.profiler.schedule(skip_first =skip_first, wait = wait, warmup = warmup, active = active)
@@ -654,6 +655,16 @@ def profile_model (model_name,
 
 
     
+    # Operator-breakdown export: enabled when called with export_profile=True
+    if export_profile:
+        print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=30))
+        prof_out_dir = f'{out_dir}/{model_name}'
+        os.system(f"mkdir -p {prof_out_dir}")
+        if export:
+            prof.export_chrome_trace(f"{prof_out_dir}/{model_name}.json")
+        filename = f"{prof_out_dir}/{model_name}.csv"
+        _analyze_prof(prof, filename, False)
+
     # print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=30))
     
     # out_dir = f'{out_dir}/{model_name}'    
