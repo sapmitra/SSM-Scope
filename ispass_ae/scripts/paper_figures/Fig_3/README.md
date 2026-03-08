@@ -1,8 +1,8 @@
 # Figure 3 — Accuracy vs TTFT: Transformer, SSM, and Hybrid (~1.5B Models)
 
-> **Tip:** The interactive notebook at [`plotting_accuracy_ttft.ipynb`](../../../notebooks/plotting_accuracy_ttft.ipynb) can regenerate the figure directly from hard-coded paper values without running any inference.
+> 💡 **Tip:** The interactive notebook at [`plotting_accuracy_ttft.ipynb`](../../../notebooks/plotting_accuracy_ttft.ipynb) can regenerate the figure directly from hard-coded paper values without running any inference.
 
-> **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
+> ⚡ **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
 > ```bash
 > # from repo root
 > chmod +x ispass_ae/scripts/paper_figures/Fig_3/gen_fig3.sh
@@ -113,7 +113,7 @@ Two PNG files are produced in `out_dir`:
 | `accuracy_ttft.png` | Publication-quality figure (no axis tick labels, 300 DPI) |
 | `accuracy_ttft_annotated.png` | Annotated version with labels and exact TTFT values |
 
-> **Tip:** If the timing CSV is not present, `plot_fig3.py` falls back to hard-coded paper values so the figure can always be regenerated without running inference.
+> 💡 **Tip:** If the timing CSV is not present, `plot_fig3.py` falls back to hard-coded paper values so the figure can always be regenerated without running inference.
 
 ---
 

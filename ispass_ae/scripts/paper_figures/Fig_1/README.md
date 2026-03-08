@@ -1,8 +1,8 @@
 # Figure 1 — TTFT & TPOT: Qwen2.5-0.5B vs Mamba2-780m
 
-> **Tip:** The interactive notebook at [`plotting_intro_ttft_tpot.ipynb`](../../../notebooks/plotting_intro_ttft_tpot.ipynb) can regenerate the figure directly from hard-coded paper values without running any inference.
+> 💡 **Tip:** The interactive notebook at [`plotting_intro_ttft_tpot.ipynb`](../../../notebooks/plotting_intro_ttft_tpot.ipynb) can regenerate the figure directly from hard-coded paper values without running any inference.
 
-> **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
+> ⚡ **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
 > ```bash
 > # from repo root
 > chmod +x ispass_ae/scripts/paper_figures/Fig_1/gen_fig1.sh
@@ -103,7 +103,7 @@ Two PNG files are produced in `out_dir`:
 | `intro_ttft_tpot.png` | Publication-quality figure (no axis labels, 300 DPI) |
 | `intro_ttft_tpot_annotated.png` | Annotated version with exact values on each bar |
 
-> **Tip:** If the CSVs are not present, `plot_fig1.py` falls back to the hardcoded paper values so the figure can always be regenerated without running inference.
+> 💡 **Tip:** If the CSVs are not present, `plot_fig1.py` falls back to the hardcoded paper values so the figure can always be regenerated without running inference.
 
 ---
 

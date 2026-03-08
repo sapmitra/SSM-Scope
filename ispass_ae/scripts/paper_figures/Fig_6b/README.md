@@ -1,8 +1,8 @@
 # Figure 6b — Overall Throughput: Qwen2.5-0.5B vs Mamba2-780m vs Falcon-H1 0.5B
 
-> **Tip:** The interactive notebook at [`plotting_throughput_seq.ipynb`](../../../notebooks/plotting_throughput_seq.ipynb) can regenerate the figure directly from hard-coded paper values without running any inference.
+> 💡 **Tip:** The interactive notebook at [`plotting_throughput_seq.ipynb`](../../../notebooks/plotting_throughput_seq.ipynb) can regenerate the figure directly from hard-coded paper values without running any inference.
 
-> **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
+> ⚡ **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
 > ```bash
 > # from repo root
 > chmod +x ispass_ae/scripts/paper_figures/Fig_6b/gen_fig6b.sh
@@ -117,6 +117,6 @@ Two PNG files are produced in `out_dir`:
 | `overall_throughput_comparison.png` | Publication-quality figure (no axis labels, 300 DPI) |
 | `overall_throughput_annotated.png`  | Annotated version with exact values on each bar (150 DPI) |
 
-> **Tip:** If the CSV is not present, `plot_fig6b.py` falls back to hard-coded paper values so the figure can always be regenerated without running inference.
+> 💡 **Tip:** If the CSV is not present, `plot_fig6b.py` falls back to hard-coded paper values so the figure can always be regenerated without running inference.
 
 ---

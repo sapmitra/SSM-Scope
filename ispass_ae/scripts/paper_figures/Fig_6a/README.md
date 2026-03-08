@@ -1,8 +1,8 @@
 # Figure 6a — Prefill Energy Consumption vs Sequence Length
 
-> **Tip:** The interactive notebook at [`plotting_energy_seq.ipynb`](../../../notebooks/plotting_energy_seq.ipynb) can regenerate the figure directly from hard-coded paper values without running any inference.
+> 💡 **Tip:** The interactive notebook at [`plotting_energy_seq.ipynb`](../../../notebooks/plotting_energy_seq.ipynb) can regenerate the figure directly from hard-coded paper values without running any inference.
 
-> **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
+> ⚡ **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
 > ```bash
 > # from repo root
 > chmod +x ispass_ae/scripts/paper_figures/Fig_6a/gen_fig6a.sh
@@ -151,4 +151,4 @@ Two PNG files are produced in `out_dir`:
 | `energy_consumption.png` | Publication-quality figure (no axis labels, 300 DPI) |
 | `energy_consumption_annotated.png` | Annotated version with exact values on each bar (150 DPI) |
 
-> **Tip:** If the CSV is absent or incomplete, `plot_fig6a.py` falls back to the hard-coded paper values so the figure can always be regenerated without running inference.
+> 💡 **Tip:** If the CSV is absent or incomplete, `plot_fig6a.py` falls back to the hard-coded paper values so the figure can always be regenerated without running inference.

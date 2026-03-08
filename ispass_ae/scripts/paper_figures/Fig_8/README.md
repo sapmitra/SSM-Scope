@@ -1,10 +1,10 @@
 # Figure 8 — GPU Kernel Time Breakdown: Hymba-1.5B vs. Zamba2-1.2B
 
-> **Tip:** The interactive notebook at
+> 💡 **Tip:** The interactive notebook at
 > [`ssm_hybrid_op_breakdown.ipynb`](../../../notebooks/ssm_hybrid_op_breakdown.ipynb)
 > can regenerate the figure directly from pre-existing profiling data in `profile_data/`
 
-> **Quick start:** Run the script from the repo root (or from this directory)
+> ⚡ **Quick start:** Run the script from the repo root (or from this directory)
 > to collect all data and generate the figure in one step:
 > ```bash
 > # from repo root
@@ -155,7 +155,7 @@ Output files written to `out_dir`:
 | `fig8_zamba2_breakdown.png` | Zamba2 individual breakdown (300 DPI) |
 | `fig8_zamba2_breakdown_annotated.png` | Zamba2 with annotations (150 DPI) |
 
-> **Tip:** If the profiling CSVs are not present, `plot_fig8.py` falls back to
+> 💡 **Tip:** If the profiling CSVs are not present, `plot_fig8.py` falls back to
 > hard-coded paper values so the figure can always be regenerated without
 > running inference.  Pass `--skip_summarize` if the summary CSVs already exist.
 

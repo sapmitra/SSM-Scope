@@ -1,11 +1,11 @@
 # Figure 7 — GPU Kernel Time Breakdown: Mamba-130m vs. Mamba2-130m
 
-> **Tip:** The interactive notebook at
+> 💡 **Tip:** The interactive notebook at
 > [`plotting_ops.ipynb`](../../../notebooks/plotting_ops.ipynb) can regenerate
 > the figure directly from pre-existing profiling data in `profile_data/`
 > without running any new inference.
 
-> **Quick start:** Run the script from the repo root (or from this directory)
+> ⚡ **Quick start:** Run the script from the repo root (or from this directory)
 > to collect all data and generate the figure in one step:
 > ```bash
 > # from repo root
@@ -140,7 +140,7 @@ Output files written to `out_dir`:
 | `fig7_mamba2_breakdown.png` | Mamba2-130m individual breakdown (300 DPI) |
 | `fig7_mamba2_breakdown_annotated.png` | Mamba2-130m with annotations (150 DPI) |
 
-> **Tip:** If the profiling CSVs are not present, `plot_fig7.py` falls back to
+> 💡 **Tip:** If the profiling CSVs are not present, `plot_fig7.py` falls back to
 > hard-coded paper values so the figure can always be regenerated without
 > running inference.  Pass `--skip_summarize` if the summary CSVs already exist.
 

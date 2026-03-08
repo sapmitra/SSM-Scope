@@ -1,12 +1,12 @@
 # Figure 9b — Cross-Device GPU Kernel Time Breakdown
 
-> **Tip:** The interactive notebook at
+> 💡 **Tip:** The interactive notebook at
 > [`plotting_ops_cross_device.ipynb`](../../../notebooks/plotting_ops_cross_device.ipynb)
 > can regenerate the figure directly from pre-existing profiling CSVs in
 > `profile_data/` (desktop) and `profile_data_jetson/` (Jetson) without
 > running any new inference.
 
-> **Quick start (desktop collection + plot):**
+> ⚡ **Quick start (desktop collection + plot):**
 > ```bash
 > # From repo root
 > chmod +x ispass_ae/scripts/paper_figures/Fig_9b/gen_fig9b.sh

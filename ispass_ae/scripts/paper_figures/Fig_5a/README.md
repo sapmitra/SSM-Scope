@@ -1,8 +1,8 @@
 # Figure 5a — GPU Memory Footprint: Transformer vs. SSM Models
 
-> **Tip:** The interactive notebook at [`plotting_mem_footprint.ipynb`](../../../notebooks/plotting_mem_footprint.ipynb) can regenerate the figure directly from a pre-collected CSV without running any profiling.
+> 💡 **Tip:** The interactive notebook at [`plotting_mem_footprint.ipynb`](../../../notebooks/plotting_mem_footprint.ipynb) can regenerate the figure directly from a pre-collected CSV without running any profiling.
 
-> **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
+> ⚡ **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
 > ```bash
 > # from repo root
 > chmod +x ispass_ae/scripts/paper_figures/Fig_5a/gen_fig5a.sh

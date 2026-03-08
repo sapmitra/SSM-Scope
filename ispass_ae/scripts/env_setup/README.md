@@ -1,14 +1,24 @@
-# Environment Setup
+# 🛠️ Environment Setup
 
-Separate Python virtual environments are required because different LLMs have unique dependencies. Mamba (`mamba_ssm`) needs CUDA kernels, while Transformer-based models only need the HuggingFace stack.
+Three Python virtual environments are required because different model families have incompatible dependencies. `mamba_ssm` needs custom CUDA kernels; Transformer-only models need only the HuggingFace stack.
 
-All environments use **Python 3.10** in our experiments.
+> All environments use **Python 3.10**.
+
+---
+
+## Contents
+
+- [Environment 1 — Transformers](#environment-1--transformers)
+- [Environment 2 — Mamba Models](#environment-2--mamba-models-mamba_ssm)
+- [Environment 3 — Falcon-H1 / Hybrid Models](#environment-3--falcon-h1--hybrid-models-torch_falcon_ispass)
+- [Jetson Nano Orin (aarch64)](#jetson-nano-orin--jetpack-62-aarch64)
+- [Quick Verification](#quick-verification)
 
 ---
 
 ## Environment 1 — Transformers
 
-**Used for:** Qwen2.5 and other Transformer only models like TinyLlama, Llama-3.2 checkpoints.
+**Used for:** Qwen2.5, LLaMA-3.2, TinyLlama, GPT-Neo checkpoints.
 
 ```bash
 python3 -m venv ~/.venvs/torch_transformers_ispass
@@ -20,8 +30,7 @@ pip install torch --index-url https://download.pytorch.org/whl/cu124
 pip install transformers==4.52.3 accelerate pandas datasets matplotlib numpy
 ```
 
-### Activate
-
+#### ▶ Activate
 ```bash
 source ~/.venvs/torch_transformers_ispass/bin/activate
 ```
@@ -32,12 +41,17 @@ source ~/.venvs/torch_transformers_ispass/bin/activate
 
 **Used for:** `state-spaces/mamba-*` and `state-spaces/mamba2-*` checkpoints that require the compiled `mamba_ssm` and `causal-conv1d` CUDA kernels.
 
-### Why `mamba_ssm` and `causal_conv1d`?
-
-- **`mamba_ssm`**: Contains the custom CUDA kernels that implement the selective scan (the core SSM operation) and exposes `MambaLMHeadModel`. Pure PyTorch cannot replicate the fused CUDA kernels required for correct and efficient SSM inference — the `state-spaces/mamba*` checkpoints are designed to be loaded exclusively through this library.
-- **`causal_conv1d`**: A fast CUDA implementation of the causal 1-D convolution used inside every Mamba layer. It is a hard dependency of `mamba_ssm` and **must** be compiled against the same CUDA toolkit, PyTorch version, and C++ ABI. Using a mismatched build causes silent numerical errors or import failures.
-
-Both packages are distributed as pre-built wheels pinned to a specific `(CUDA, PyTorch, C++ ABI, Python)` tuple — here **CUDA 12.x · PyTorch 2.6 · cxx11 ABI = FALSE · Python 3.10** — which is why the wheel URLs are used directly instead of a plain `pip install mamba-ssm`.
+> **Why pinned wheels?**
+> `mamba_ssm` and `causal_conv1d` contain fused CUDA kernels that must be compiled against a specific `(CUDA · PyTorch · cxx11-ABI · Python)` tuple.
+> The wheels below target **CUDA 12.x · PyTorch 2.6 · cxx11 ABI=False · Python 3.10**.
+> A mismatched build causes silent numerical errors or import failures.
+>
+> - **`mamba_ssm`** — custom CUDA kernels for the selective scan (core SSM op); exposes `MambaLMHeadModel`.
+> - **`causal_conv1d`** — fast CUDA causal 1-D convolution; hard dependency of `mamba_ssm`.
+>
+> Browse available wheels:
+> - <https://github.com/state-spaces/mamba/releases/tag/v2.2.4>
+> - <https://github.com/Dao-AILab/causal-conv1d/releases/tag/v1.5.0.post8>
 
 ```bash
 python3 -m venv ~/.venvs/torch_ssm_ispass
@@ -55,8 +69,7 @@ pip install https://github.com/state-spaces/mamba/releases/download/v2.2.4/mamba
 pip install https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.5.0.post8/causal_conv1d-1.5.0.post8+cu12torch2.6cxx11abiFALSE-cp310-cp310-linux_x86_64.whl
 ```
 
-### Activate
-
+#### ▶ Activate
 ```bash
 source ~/.venvs/torch_ssm_ispass/bin/activate
 ```
@@ -87,8 +100,7 @@ pip install flash-attn==2.7.3 --no-build-isolation
 pip install sentencepiece==0.2.1 protobuf==6.33.1
 ```
 
-### Activate
-
+#### ▶ Activate
 ```bash
 source ~/.venvs/torch_falcon_ispass/bin/activate
 ```
@@ -169,7 +181,9 @@ pip install --upgrade pip
 # PyTorch 2.8.0 pre-built for JetPack 6.2 / CUDA 12.6 / aarch64
 pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/62a/1beee9f2f1470/torch-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=62a1beee9f2f147076a974d2942c90060c12771c94740830327cae705b2595fc"
 pip install accelerate pandas datasets matplotlib numpy transformers==4.57.3
-# causal_conv1d 1.5.2 — pre-built for JetPack 6.2 / aarch64
+# mamba_ssm 2.2.5 and causal_conv1d 1.5.2 — pre-built for JetPack 6.2 / aarch64
+# Browse available wheels at https://pypi.jetson-ai-lab.io/jp6/cu126
+pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/b8e/35eeb4d7f0ada/mamba_ssm-2.2.5-cp310-cp310-linux_aarch64.whl#sha256=b8e35eeb4d7f0ada87235c15db0408cded09863bf6798ac451d0f65a6035b4ba"
 pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/28a/11e19b7f9fd56/causal_conv1d-1.5.2-cp310-cp310-linux_aarch64.whl#sha256=28a11e19b7f9fd56f17347da18fa31e09ad2ac5e61b8ed5653f069cbe7e5177b"
 # triton 3.4.0 — pre-built for JetPack 6.2 / aarch64
 pip install "https://pypi.jetson-ai-lab.io/jp6/cu126/+f/9da/4bcb8e8f0eba0/triton-3.4.0-cp310-cp310-linux_aarch64.whl#sha256=9da4bcb8e8f0eba00a097ad8c57b26102add499e520d67fb2d5362bebf976ca3"
@@ -183,9 +197,9 @@ source /data/.venvs/torch_falcon_ispass/bin/activate
 
 ---
 
-## Quick Verification
+## ✅ Quick Verification
 
-After activating the relevant environment, confirm the setup from inside `src/`:
+After activating any environment, confirm the setup from `<repo_root>/src/`:
 
 ```bash
 cd <repo_root>/src
@@ -193,9 +207,9 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 python -c "import transformers; print(transformers.__version__)"
 ```
 
-For Environments 2 and 3, additionally verify:
+For Environments 2 and 3, additionally verify the CUDA kernels loaded correctly:
 
 ```bash
-python -c "from mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel; print('mamba_ssm OK')"
-python -c "import causal_conv1d; print('causal_conv1d OK')"
+python -c "from mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel; print('mamba_ssm ✓')"
+python -c "import causal_conv1d; print('causal_conv1d ✓')"
 ```

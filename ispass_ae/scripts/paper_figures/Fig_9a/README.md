@@ -1,11 +1,11 @@
 # Figure 9a — GPU Kernel Time Breakdown: Mamba-130m vs. Mamba2-130m (Jetson Nano Orin)
 
-> **Tip:** The interactive notebook at
+> 💡 **Tip:** The interactive notebook at
 > [`plotting_ops_jetson.ipynb`](../../../notebooks/plotting_ops_jetson.ipynb)
 > can regenerate the figure directly from pre-existing profiling data without
 > running new inference.
 
-> **Quick start:** Run the script from the repo root (or from this directory)
+> ⚡ **Quick start:** Run the script from the repo root (or from this directory)
 > to collect all data and generate the figure in one step:
 > ```bash
 > # from repo root
