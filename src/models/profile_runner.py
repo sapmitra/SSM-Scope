@@ -355,6 +355,23 @@ class MambaProfile:
         self.model.eval()
         profile_model_mamba_energy(self.model_name, self.model, inputs, custom_ops, num_runs, self.device, False, out_dir, export)
 
+    def eval_profile(self, seq_len: int = 16, batch_size: int = 1, num_runs: int = NUM_RUNS,
+                     export: bool = EXPORT, custom_ops=custom_ops, inputs=None,
+                     profile_out_dir: str = None):
+        """Run operator-breakdown profiling and export per-op CSV + chrome trace.
+
+        Unlike ``eval_``, this method enables ``export_profile=True``
+        """
+        self.model_name = f'{self.model_name}_{self.device}_{batch_size}_{seq_len}'
+        prompt = gen_random_prompt(seq_len)
+        inputs = self.tokenizer(prompt, return_tensors='pt').to(self.device)
+        self.model.eval()
+        profile_model_mamba(
+            self.model_name, self.model, inputs, custom_ops, num_runs, self.device,
+            False, profile_out_dir or out_dir, export, self.tokenizer,
+            export_profile=True,
+        )
+
 # for evaluating Zamba2 please enable seperate virtual env with transformers>=4.48.0
 # class Zamba2Profile:
 #     def __init__(self, model_name: str = 'zamba2', model_config: str = 'zamba2', device: str = 'cuda'):
@@ -396,6 +413,14 @@ def mamba(seq_len: int = 64, batch_size: int = 1, device: str = 'cuda', weights:
     model.eval_(seq_len, batch_size, NUM_RUNS, EXPORT, custom_ops)
     del model
 
+def mamba_ops_profile(seq_len: int = 1024, batch_size: int = 1, device: str = 'cuda',
+                      weights: str = None, profile_out_dir: str = None):
+    """Operator-breakdown profiling for mamba-130m (Fig 7 data collection)."""
+    model = MambaProfile('mamba-130m', weights or 'state-spaces/mamba-130m', device)
+    model.eval_profile(seq_len, batch_size, NUM_RUNS, EXPORT, custom_ops,
+                       profile_out_dir=profile_out_dir)
+    del model
+
 def mamba2(seq_len: int = 64, batch_size: int = 1, device: str = 'cuda', weights: str = None):
     path = weights or 'state-spaces/mamba2-780m'
     # Derive a compact name from the HF repo path so the model size is encoded in CSV entries
@@ -405,6 +430,14 @@ def mamba2(seq_len: int = 64, batch_size: int = 1, device: str = 'cuda', weights
     # model = MambaProfile('mamba2-370m', weights or 'state-spaces/mamba2-370m', device)
     model = MambaProfile(model_name, path, device)
     model.eval_(seq_len, batch_size, NUM_RUNS, EXPORT, custom_ops)
+    del model
+
+def mamba2_ops_profile(seq_len: int = 1024, batch_size: int = 1, device: str = 'cuda',
+                       weights: str = None, profile_out_dir: str = None):
+    """Operator-breakdown profiling for mamba2-130m (Fig 7 data collection)."""
+    model = MambaProfile('mamba2-130m', weights or 'state-spaces/mamba2-130m', device)
+    model.eval_profile(seq_len, batch_size, NUM_RUNS, EXPORT, custom_ops,
+                       profile_out_dir=profile_out_dir)
     del model
 
 def mamba2_generate(seq_len: int = 8, max_num_tokens: int = 256, device: str = 'cuda', weights: str = None):
@@ -578,13 +611,17 @@ profiling_functions = {
     'qwen25-instruct-throughput': qwen25_instruct_generate_throughput,
     'mamba2-throughput': mamba2_generate_throughput,
     'falcon-h1-throughput': falcon_h1_generate_throughput,
+    # Operator-breakdown profiling for Fig 7
+    'mamba-ops-profile': mamba_ops_profile,
+    'mamba2-ops-profile': mamba2_ops_profile,
 }
 
 def parse_arguments(): 
     parser = argparse.ArgumentParser(description ='Torch Profiling')
     
     parser.add_argument ("--model_name", dest="model_name",
-                        required = True,  type = str, help = "Name of Model to profile", choices = ['llama3', 'qwen25-instruct', 'tinyllama', 'gpt-neo-125m', 'phi3', 'llama3_2', 'mistral', 'mamba', 'mamba2', 'mamba_hf', 'zamba2', 'hymba', 'falcon-h1', 'nemotron-flash'])
+                        required = True,  type = str, help = "Name of Model to profile",
+                        choices = list(profiling_functions.keys()))
     
     parser.add_argument ("--model_weights", dest="weights",
                         required = False,  type = str, help = "Path to local weights")
@@ -600,6 +637,11 @@ def parse_arguments():
     
     parser.add_argument ("--out_dir", dest="out_dir",
                         required = False,  type = str, help = "Directory to store output csv files")
+
+    parser.add_argument ("--profile_out_dir", dest="profile_out_dir",
+                        required = False,  type = str, default = None,
+                        help = "Root directory for operator-breakdown CSV/trace output "
+                               "(used by *-ops-profile model names, e.g. mamba-ops-profile)")
     
     args = parser.parse_args()
     return args
@@ -618,7 +660,13 @@ def main ():
 
     print(f'Profiling {model_name} on {device}')
     st = time.perf_counter()
-    profiling_functions[model_name](seq_len, batch_size, device, weights=weight_path)
+    fn = profiling_functions[model_name]
+    # ops-profile functions accept an optional profile_out_dir keyword argument
+    if model_name.endswith('-ops-profile') and args.profile_out_dir is not None:
+        fn(seq_len, batch_size, device, weights=weight_path,
+           profile_out_dir=args.profile_out_dir)
+    else:
+        fn(seq_len, batch_size, device, weights=weight_path)
     et = time.perf_counter()
     print (f"Finished Profiling {model_name} on {device} in {et-st:.2f} seconds")
 

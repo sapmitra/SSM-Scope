@@ -678,7 +678,8 @@ def profile_model_mamba(model_name,
                         dynamo=False, 
                         out_dir="./non-gemm-out/", 
                         export=True,
-                        tokenizer=None): 
+                        tokenizer=None,
+                        export_profile: bool = False): 
 
     skip_first, wait, warmup, active = 1, 2, 2, num_prof_runs
     # fn = lambda: model.generate(
@@ -764,16 +765,17 @@ def profile_model_mamba(model_name,
     
     print(f"Timing data saved to {timing_csv_path}")
 
-    # print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=30))
-    
-    # out_dir = f'{out_dir}/{model_name}'    
-    # os.system(f"mkdir -p {out_dir}") 
-    
-    # if export: 
-    #     prof.export_chrome_trace(f"{out_dir}/{model_name}.json")
-    
-    # filename = f"{out_dir}/{model_name}.csv"
-    # _analyze_prof(prof, filename, custom)
+    # Operator-breakdown export: enabled when called with export_profile=True
+    # (e.g. from Fig_7 data-collection scripts). Off by default to preserve
+    # the original timing-only behaviour used by all other callers.
+    if export_profile:
+        print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=30))
+        prof_out_dir = f'{out_dir}/{model_name}'
+        os.system(f"mkdir -p {prof_out_dir}")
+        if export:
+            prof.export_chrome_trace(f"{prof_out_dir}/{model_name}.json")
+        filename = f"{prof_out_dir}/{model_name}.csv"
+        _analyze_prof(prof, filename, False)
 
 @torch.no_grad()
 def profile_model_mamba_generate(model_name, 
