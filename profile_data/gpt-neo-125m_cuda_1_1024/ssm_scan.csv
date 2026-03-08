@@ -1,0 +1,3 @@
+,name,cpu_time (us),cuda_time (us),total_time (us),count
+0,SSM_Scan,0.0,0.0,0.0,
+0,Inference,74761.20599999999,67383.21900000019,142144.42500000016,
