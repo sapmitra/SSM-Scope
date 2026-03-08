@@ -9,9 +9,11 @@
 > to collect all data and generate the figure in one step:
 > ```bash
 > # from repo root
+> chmod +x ispass_ae/scripts/paper_figures/Fig_7/gen_fig7.sh
 > bash ispass_ae/scripts/paper_figures/Fig_7/gen_fig7.sh
 >
 > # or from this directory
+> chmod +x gen_fig7.sh
 > bash gen_fig7.sh
 > ```
 > The script activates the correct venv automatically, runs all 20 profiling

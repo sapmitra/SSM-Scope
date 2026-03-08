@@ -9,9 +9,11 @@
 > to collect all data and generate the figure in one step:
 > ```bash
 > # from repo root
+> chmod +x ispass_ae/scripts/paper_figures/Fig_8/gen_fig8.sh
 > bash ispass_ae/scripts/paper_figures/Fig_8/gen_fig8.sh
 >
 > # or from this directory
+> chmod +x gen_fig8.sh
 > bash gen_fig8.sh
 > ```
 > The script activates the correct venv automatically, runs all 15 profiling
@@ -160,21 +162,3 @@ Output files written to `out_dir`:
 
 ---
 
-## Implementation Notes
-
-### How operator-breakdown export is enabled without breaking other scripts
-
-`profile_model()` in `src/profiling/eval.py` normally operates in
-*timing-only* mode (TTFT measurement).  A new optional flag
-`export_profile=True` activates the commented-out operator-breakdown export
-block (CSV + chrome trace) that was present in the original code.
-
-`LMProfile.eval_profile()` in `src/models/profile_runner.py` is a new thin
-wrapper around `eval_()` that sets `export_profile=True`.  All existing
-callers of `eval_()` — including every other figure's data-collection script —
-continue to use the default `export_profile=False` and are therefore
-unaffected.
-
-The same `export_profile` pattern already existed for Mamba models via
-`MambaProfile.eval_profile()`.  This change replicates the same design for
-HuggingFace transformer/hybrid models.

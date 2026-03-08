@@ -5,9 +5,11 @@
 > **Quick start:** Run the script from the repo root (or from this directory) to collect all data and generate the figure in one step:
 > ```bash
 > # from repo root
+> chmod +x ispass_ae/scripts/paper_figures/Fig_5a/gen_fig5a.sh
 > bash ispass_ae/scripts/paper_figures/Fig_5a/gen_fig5a.sh
 >
 > # or from this directory
+> chmod +x gen_fig5a.sh
 > bash gen_fig5a.sh
 > ```
 > The script activates the correct venvs automatically and writes the output PNG to this directory.

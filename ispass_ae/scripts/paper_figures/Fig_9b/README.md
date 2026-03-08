@@ -9,9 +9,11 @@
 > **Quick start (desktop collection + plot):**
 > ```bash
 > # From repo root
+> chmod +x ispass_ae/scripts/paper_figures/Fig_9b/gen_fig9b.sh
 > bash ispass_ae/scripts/paper_figures/Fig_9b/gen_fig9b.sh
 >
 > # Or from this directory
+> chmod +x gen_fig9b.sh
 > bash gen_fig9b.sh
 > ```
 > The script activates the correct venv for each model family, profiles all
