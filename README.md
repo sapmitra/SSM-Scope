@@ -42,6 +42,12 @@
 - **Operator-Level Profiling** — latency breakdowns separating GEMM, non-GEMM, and SSM-specific kernels.
 - **Energy Consumption Metrics** — joules-per-prefill from `nvidia-smi` power logs, critical for edge evaluation.
 
+<p align="center">
+  <img src=".github/memory_footprint_6-1.png" alt="GPU Memory Footprint — Transformer vs SSM vs Hybrid across sequence lengths" width="820">
+  <br>
+  <sub><b>Fig 5:</b> Peak GPU memory footprint vs sequence length across Transformer, SSM, and Hybrid model families — RTX 4090 (left) &amp; NVIDIA Jetson Nano Orin (right).</sub>
+</p>
+
 ---
 
 ## 📊 Paper Figures at a Glance
